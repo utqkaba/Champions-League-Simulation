@@ -58,7 +58,7 @@ class ChampionshipPredictionService
 
             $strengthTotal = $team->attack_rating + $team->defense_rating + $team->tactic_rating;
 
-            $pointGapScore = max(0, 100 - ($pointGap * 18));
+            $pointGapScore = max(0, 100 - ($pointGap * 20));
             $goalDifferenceScore = max(0, 100 - ($goalDifferenceGap * 4));
             $maxPossibleScore = ($maxPossiblePoints / max(1, $maxPossiblePointsInTable)) * 100;
             $strengthScore = ($strengthTotal / $maxStrength) * 100;
