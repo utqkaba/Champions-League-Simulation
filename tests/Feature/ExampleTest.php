@@ -54,6 +54,8 @@ class ExampleTest extends TestCase
                 ->component('Simulator/Simulation')
                 ->where('currentWeek', 1)
                 ->has('currentWeekFixtures', 2)
+                ->has('fixturesByMatchday', 6)
+                ->where('showAllWeeksResults', false)
                 ->has('standings', 4)
                 ->has('championshipPredictions', 4)
                 ->where('championshipPredictions.0.percentage', fn ($value) => is_int($value)));
@@ -82,9 +84,18 @@ class ExampleTest extends TestCase
         $response = $this->post(route('simulator.play-all-weeks'));
 
         $response
-            ->assertRedirect(route('simulator.simulation'));
+            ->assertRedirect(route('simulator.simulation', ['view' => 'all-weeks']));
 
         $this->assertDatabaseMissing('fixtures', ['status' => 'scheduled']);
+
+        $simulationPage = $this->get(route('simulator.simulation', ['view' => 'all-weeks']));
+
+        $simulationPage->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Simulator/Simulation')
+            ->where('showAllWeeksResults', true)
+            ->has('fixturesByMatchday', 6)
+            ->where('fixturesByMatchday.0.0.is_completed', true)
+            ->where('fixturesByMatchday.5.1.is_completed', true));
     }
 
     public function test_reset_data_keeps_user_on_simulation_page_and_clears_scores(): void

@@ -18,6 +18,14 @@ defineProps({
         type: Array,
         required: true,
     },
+    fixturesByMatchday: {
+        type: Array,
+        required: true,
+    },
+    showAllWeeksResults: {
+        type: Boolean,
+        required: true,
+    },
 });
 
 function playAllWeeks() {
@@ -162,6 +170,47 @@ function resetData() {
                     Reset Data
                 </button>
             </div>
+        </section>
+
+        <section
+            v-if="showAllWeeksResults"
+            class="my-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+        >
+            <div
+                class="md:col-span-2 xl:col-span-3 text-center text-[20px] font-light text-[#6f767d]"
+            >
+                All Result
+            </div>
+
+            <article
+                v-for="matchday in fixturesByMatchday"
+                :key="`summary-week-${matchday[0]?.matchday}`"
+                class="min-w-0"
+            >
+                <header
+                    class="bg-[#2f353b] px-3 py-4 text-[12px] font-bold text-white"
+                >
+                    Week {{ matchday[0]?.matchday }}
+                </header>
+
+                <div class="border-b border-[#d7dbe0]">
+                    <div
+                        v-for="fixture in matchday"
+                        :key="fixture.id"
+                        class="grid grid-cols-[minmax(0,1fr)_52px_minmax(0,1fr)] items-center border-b border-[#e3e6ea] px-3 py-4 text-[14px] text-[#2c333a] last:border-b-0"
+                    >
+                        <div class="truncate pr-2">
+                            {{ fixture.home_team.name }}
+                        </div>
+                        <div class="text-center">
+                            {{ fixture.home_goals }}-{{ fixture.away_goals }}
+                        </div>
+                        <div class="truncate pl-2 text-right">
+                            {{ fixture.away_team.name }}
+                        </div>
+                    </div>
+                </div>
+            </article>
         </section>
     </main>
 </template>

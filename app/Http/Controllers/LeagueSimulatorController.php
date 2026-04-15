@@ -9,6 +9,7 @@ use App\Services\FixtureGeneratorService;
 use App\Services\MatchSimulationService;
 use App\Services\StandingsService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -69,7 +70,7 @@ class LeagueSimulatorController extends Controller
         ]);
     }
 
-    public function simulation(): Response|RedirectResponse
+    public function simulation(Request $request): Response|RedirectResponse
     {
         if (! Fixture::query()->exists()) {
             return to_route('simulator.teams');
@@ -81,10 +82,13 @@ class LeagueSimulatorController extends Controller
         $teams = $this->teamsForDisplay();
 
         $displayWeek = $this->displayWeek();
+        $showAllWeeksResults = $request->query('view') === 'all-weeks';
 
         return Inertia::render('Simulator/Simulation', [
             'currentWeek' => $displayWeek,
             'currentWeekFixtures' => $this->fixturesForWeek($displayWeek),
+            'fixturesByMatchday' => $this->fixturesByMatchday(),
+            'showAllWeeksResults' => $showAllWeeksResults,
             'standings' => $standings,
             'championshipPredictions' => $this->championshipPredictionService->build($standings, $teams)->values(),
         ]);
@@ -128,7 +132,7 @@ class LeagueSimulatorController extends Controller
             $this->matchSimulationService->simulate($fixture);
         }
 
-        return to_route('simulator.simulation');
+        return to_route('simulator.simulation', ['view' => 'all-weeks']);
     }
 
     public function resetData(): RedirectResponse
