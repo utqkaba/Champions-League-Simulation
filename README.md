@@ -27,10 +27,3 @@ Alternatif olarak iki terminal:
 php artisan serve
 npm run dev
 ```
-
-## Sonraki gelistirme adimlari
-
-- PDF dokumanlarindaki is kurallarina gore mac simulasyonu eklemek
-- Esitlik bozma kurallarini netlestirmek
-- Sonuclari manuel oynatma veya otomatik sezon simulasyonu ile yonetmek
-- Test kapsamlarini yazmak
