@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --page-bg: #ffffff;
+        --panel-bg: #ffffff;
+        --panel-border: #d7dbe0;
+        --ink: #2d343c;
+        --muted: #7e8791;
+        --accent: #23a9c7;
+        --header-bg: #2f353b;
+    }
+
+    body {
+        @apply min-h-screen antialiased;
+        background: var(--page-bg);
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #app {
+        @apply min-h-screen;
+    }
+}
