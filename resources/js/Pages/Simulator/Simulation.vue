@@ -83,8 +83,8 @@ function saveFixtureResult(fixtureId) {
 <template>
     <Head title="Simulation" />
 
-    <main class="mx-auto min-h-screen max-w-[1500px] px-4 py-4 sm:px-6 lg:px-8">
-        <PageHeading title="Simulation" centered />
+    <main class="mx-auto min-h-screen max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8">
+        <PageHeading title="Simulation" centered margin-class="mb-10" />
 
         <section
             class="grid gap-6 lg:grid-cols-2 xl:grid-cols-[minmax(0,1.46fr)_minmax(326px,0.98fr)_minmax(228px,0.66fr)] xl:gap-8"
