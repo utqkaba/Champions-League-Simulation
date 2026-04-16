@@ -39,7 +39,7 @@ A 4-team league simulation project built with Laravel, Vue 3, and Inertia.js. Th
 
 ### Simulation Progress
 
-![Simulation Progress](docs/images/simulation-progress.png)
+![Simulation Progress](docs/images/simulation-progress-week4.png)
 
 ## How It Works
 
@@ -84,13 +84,6 @@ Each team has three ratings scored out of 100:
 - `attack`
 - `defense`
 - `tactic`
-
-The current seeded team profiles are tuned to reflect different football identities:
-
-- `Manchester City`: highest tactical strength and the strongest overall title favorite
-- `Arsenal`: strong defense and discipline-driven success
-- `Liverpool`: balanced across all three metrics
-- `Newcastle United`: average to below-average overall and less likely to win the league
 
 ## Running the Project
 
