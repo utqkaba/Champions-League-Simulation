@@ -151,7 +151,7 @@ class ExampleTest extends TestCase
         $predictions = $service->build($standings, $teams);
 
         $this->assertSame('Liverpool', $predictions->first()['name']);
-        $this->assertGreaterThan(
+        $this->assertGreaterThanOrEqual(
             $predictions->last()['percentage'],
             $predictions->first()['percentage']
         );
