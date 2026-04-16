@@ -46,10 +46,10 @@ A 4-team league simulation project built with Laravel, Vue 3, and Inertia.js. Th
 1. The first screen lists the tournament teams.
 2. Clicking `Generate Fixtures` creates a dynamic 6-week schedule and routes the user to the fixture page.
 3. The simulation screen lets the user:
-   - play the next week,
-   - play all remaining weeks,
-   - reset match results without leaving the page,
-   - edit played match scores manually.
+    - play the next week,
+    - play all remaining weeks,
+    - reset match results without leaving the page,
+    - edit played match scores manually.
 4. Standings and championship predictions are recalculated after every simulation or manual score update.
 
 ## Project Structure
@@ -127,10 +127,3 @@ npm run dev
 ```bash
 php artisan test
 ```
-
-## Notes
-
-- Match fixtures are generated dynamically instead of using a fixed schedule.
-- The second half of the season mirrors the first half with reversed home/away teams.
-- Editing a match result updates both the standings table and championship predictions.
-
