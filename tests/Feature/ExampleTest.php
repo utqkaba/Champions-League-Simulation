@@ -42,6 +42,22 @@ class ExampleTest extends TestCase
         $this->assertDatabaseCount('fixtures', 12);
     }
 
+    public function test_first_week_home_and_away_status_flips_in_second_week(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+        $this->post(route('simulator.generate-fixtures'));
+
+        $weekOneFixtures = Fixture::query()->where('matchday', 1)->get();
+        $weekTwoFixtures = Fixture::query()->where('matchday', 2)->get();
+
+        foreach (Team::query()->get() as $team) {
+            $playedAtHomeInWeekOne = $weekOneFixtures->contains('home_team_id', $team->id);
+            $playedAtHomeInWeekTwo = $weekTwoFixtures->contains('home_team_id', $team->id);
+
+            $this->assertNotSame($playedAtHomeInWeekOne, $playedAtHomeInWeekTwo);
+        }
+    }
+
     public function test_simulation_page_can_be_opened_without_playing_matches(): void
     {
         $this->seed(DatabaseSeeder::class);
@@ -140,13 +156,14 @@ class ExampleTest extends TestCase
         ]);
 
         $simulationPage = $this->get(route('simulator.simulation'));
+        $homeTeamName = $fixture->homeTeam->name;
 
         $simulationPage->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Simulator/Simulation')
             ->where('currentWeek', 1)
             ->where('currentWeekFixtures.0.home_goals', 2)
             ->where('currentWeekFixtures.0.away_goals', 0)
-            ->where('standings.0.name', 'Arsenal')
+            ->where('standings.0.name', $homeTeamName)
             ->where('standings.0.points', 3)
             ->where('standings.0.goal_difference', 2));
     }
