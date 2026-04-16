@@ -9,4 +9,5 @@ Route::get('/fixtures', [LeagueSimulatorController::class, 'fixtures'])->name('s
 Route::get('/simulation', [LeagueSimulatorController::class, 'simulation'])->name('simulator.simulation');
 Route::post('/simulation/play-next-week', [LeagueSimulatorController::class, 'playNextWeek'])->name('simulator.play-next-week');
 Route::post('/simulation/play-all-weeks', [LeagueSimulatorController::class, 'playAllWeeks'])->name('simulator.play-all-weeks');
+Route::patch('/simulation/fixtures/{fixture}/result', [LeagueSimulatorController::class, 'updateFixtureResult'])->name('simulator.update-fixture-result');
 Route::post('/simulation/reset-data', [LeagueSimulatorController::class, 'resetData'])->name('simulator.reset-data');

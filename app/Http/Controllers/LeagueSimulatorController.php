@@ -135,6 +135,22 @@ class LeagueSimulatorController extends Controller
         return to_route('simulator.simulation', ['view' => 'all-weeks']);
     }
 
+    public function updateFixtureResult(Request $request, Fixture $fixture): RedirectResponse
+    {
+        $validated = $request->validate([
+            'home_goals' => ['required', 'integer', 'min:0', 'max:20'],
+            'away_goals' => ['required', 'integer', 'min:0', 'max:20'],
+        ]);
+
+        $fixture->update([
+            'home_goals' => $validated['home_goals'],
+            'away_goals' => $validated['away_goals'],
+            'status' => 'completed',
+        ]);
+
+        return back();
+    }
+
     public function resetData(): RedirectResponse
     {
         Fixture::query()->update([

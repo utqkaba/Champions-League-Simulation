@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Database\Seeders\DatabaseSeeder;
+use App\Models\Fixture;
 use App\Models\Team;
 use App\Services\ChampionshipPredictionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -112,6 +113,42 @@ class ExampleTest extends TestCase
         $this->assertDatabaseCount('fixtures', 12);
         $this->assertDatabaseMissing('fixtures', ['status' => 'completed']);
         $this->assertDatabaseMissing('fixtures', ['home_goals' => 1]);
+    }
+
+    public function test_fixture_results_can_be_edited_and_standings_are_recalculated(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+        $this->post(route('simulator.generate-fixtures'));
+
+        $fixture = Fixture::query()
+            ->where('matchday', 1)
+            ->orderBy('id')
+            ->firstOrFail();
+
+        $response = $this->patch(route('simulator.update-fixture-result', $fixture), [
+            'home_goals' => 2,
+            'away_goals' => 0,
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('fixtures', [
+            'id' => $fixture->id,
+            'home_goals' => 2,
+            'away_goals' => 0,
+            'status' => 'completed',
+        ]);
+
+        $simulationPage = $this->get(route('simulator.simulation'));
+
+        $simulationPage->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Simulator/Simulation')
+            ->where('currentWeek', 1)
+            ->where('currentWeekFixtures.0.home_goals', 2)
+            ->where('currentWeekFixtures.0.away_goals', 0)
+            ->where('standings.0.name', 'Arsenal')
+            ->where('standings.0.points', 3)
+            ->where('standings.0.goal_difference', 2));
     }
 
     public function test_championship_predictions_respect_goal_difference_when_points_are_equal(): void

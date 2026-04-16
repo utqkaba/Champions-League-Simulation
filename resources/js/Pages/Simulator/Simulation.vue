@@ -1,5 +1,6 @@
 <script setup>
 import { Head, router } from "@inertiajs/vue3";
+import { reactive, ref } from "vue";
 
 defineProps({
     currentWeek: {
@@ -28,6 +29,12 @@ defineProps({
     },
 });
 
+const editingFixtureId = ref(null);
+const scoreForm = reactive({
+    home_goals: 0,
+    away_goals: 0,
+});
+
 function playAllWeeks() {
     router.post(route("simulator.play-all-weeks"));
 }
@@ -38,6 +45,32 @@ function playNextWeek() {
 
 function resetData() {
     router.post(route("simulator.reset-data"));
+}
+
+function startEditing(fixture) {
+    editingFixtureId.value = fixture.id;
+    scoreForm.home_goals = fixture.home_goals ?? 0;
+    scoreForm.away_goals = fixture.away_goals ?? 0;
+}
+
+function cancelEditing() {
+    editingFixtureId.value = null;
+    scoreForm.home_goals = 0;
+    scoreForm.away_goals = 0;
+}
+
+function saveFixtureResult(fixtureId) {
+    router.patch(
+        route("simulator.update-fixture-result", fixtureId),
+        {
+            home_goals: Number(scoreForm.home_goals),
+            away_goals: Number(scoreForm.away_goals),
+        },
+        {
+            preserveScroll: true,
+            onSuccess: () => cancelEditing(),
+        },
+    );
 }
 </script>
 
@@ -99,21 +132,68 @@ function resetData() {
                     <div
                         v-for="fixture in currentWeekFixtures"
                         :key="fixture.id"
-                        class="grid grid-cols-[minmax(0,1fr)_52px_minmax(0,1fr)] items-center border-b border-[#e3e6ea] px-3 py-5 text-[15px] text-[#2c333a] last:border-b-0"
+                        class="grid grid-cols-[minmax(0,1fr)_92px_minmax(0,1fr)_78px] items-center gap-x-2 border-b border-[#e3e6ea] px-3 py-5 text-[15px] text-[#2c333a] last:border-b-0"
                     >
                         <div class="truncate pr-2">
                             {{ fixture.home_team.name }}
                         </div>
                         <div class="text-center">
-                            <span v-if="fixture.is_completed">
-                                {{ fixture.home_goals }}-{{
-                                    fixture.away_goals
-                                }}
-                            </span>
-                            <span v-else>-</span>
+                            <template v-if="editingFixtureId === fixture.id">
+                                <div class="flex items-center justify-center gap-1">
+                                    <input
+                                        v-model.number="scoreForm.home_goals"
+                                        type="number"
+                                        min="0"
+                                        class="w-8 rounded border border-[#cfd5db] px-1 py-1 text-center text-[12px]"
+                                    />
+                                    <span>-</span>
+                                    <input
+                                        v-model.number="scoreForm.away_goals"
+                                        type="number"
+                                        min="0"
+                                        class="w-8 rounded border border-[#cfd5db] px-1 py-1 text-center text-[12px]"
+                                    />
+                                </div>
+                            </template>
+                            <template v-else>
+                                <span v-if="fixture.is_completed">
+                                    {{ fixture.home_goals }}-{{
+                                        fixture.away_goals
+                                    }}
+                                </span>
+                                <span v-else>-</span>
+                            </template>
                         </div>
                         <div class="truncate pl-2 text-right">
                             {{ fixture.away_team.name }}
+                        </div>
+                        <div class="flex justify-end">
+                            <template v-if="editingFixtureId === fixture.id">
+                                <div class="flex gap-2 text-[12px]">
+                                    <button
+                                        type="button"
+                                        class="text-[#2aa7c7]"
+                                        @click="saveFixtureResult(fixture.id)"
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="text-[#6f767d]"
+                                        @click="cancelEditing"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </template>
+                            <button
+                                v-else
+                                type="button"
+                                class="text-[12px] font-semibold text-[#2aa7c7]"
+                                @click="startEditing(fixture)"
+                            >
+                                {{ fixture.is_completed ? "Edit" : "Set" }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -197,16 +277,63 @@ function resetData() {
                     <div
                         v-for="fixture in matchday"
                         :key="fixture.id"
-                        class="grid grid-cols-[minmax(0,1fr)_52px_minmax(0,1fr)] items-center border-b border-[#e3e6ea] px-3 py-4 text-[14px] text-[#2c333a] last:border-b-0"
+                        class="grid grid-cols-[minmax(0,1fr)_92px_minmax(0,1fr)_78px] items-center gap-x-2 border-b border-[#e3e6ea] px-3 py-4 text-[14px] text-[#2c333a] last:border-b-0"
                     >
                         <div class="truncate pr-2">
                             {{ fixture.home_team.name }}
                         </div>
                         <div class="text-center">
-                            {{ fixture.home_goals }}-{{ fixture.away_goals }}
+                            <template v-if="editingFixtureId === fixture.id">
+                                <div class="flex items-center justify-center gap-1">
+                                    <input
+                                        v-model.number="scoreForm.home_goals"
+                                        type="number"
+                                        min="0"
+                                        class="w-8 rounded border border-[#cfd5db] px-1 py-1 text-center text-[12px]"
+                                    />
+                                    <span>-</span>
+                                    <input
+                                        v-model.number="scoreForm.away_goals"
+                                        type="number"
+                                        min="0"
+                                        class="w-8 rounded border border-[#cfd5db] px-1 py-1 text-center text-[12px]"
+                                    />
+                                </div>
+                            </template>
+                            <template v-else>
+                                {{ fixture.home_goals }}-{{ fixture.away_goals }}
+                            </template>
                         </div>
                         <div class="truncate pl-2 text-right">
                             {{ fixture.away_team.name }}
+                        </div>
+                        <div class="flex justify-end">
+                            <template v-if="editingFixtureId === fixture.id">
+                                <div class="flex gap-2 text-[12px]">
+                                    <button
+                                        type="button"
+                                        class="text-[#2aa7c7]"
+                                        @click="saveFixtureResult(fixture.id)"
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="text-[#6f767d]"
+                                        @click="cancelEditing"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </template>
+                            <button
+                                v-else
+                                type="button"
+                                class="text-[12px] font-semibold text-[#2aa7c7]"
+                                @click="startEditing(fixture)"
+                            >
+                                Edit
+                            </button>
                         </div>
                     </div>
                 </div>
