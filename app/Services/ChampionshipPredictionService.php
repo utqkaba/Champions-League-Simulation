@@ -25,9 +25,9 @@ class ChampionshipPredictionService
     ];
 
     private const PREDICTION_WEIGHTS = [
-        'point_gap' => 0.40,
-        'goal_difference' => 0.20,
-        'max_possible_points' => 0.22,
+        'point_gap' => 0.48,
+        'goal_difference' => 0.14,
+        'max_possible_points' => 0.20,
         'strength' => 0.18,
     ];
 
