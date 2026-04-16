@@ -7,7 +7,7 @@ use App\Models\Fixture;
 class MatchSimulationService
 {
     private const HOME_ADVANTAGE = [
-        'attack_bonus' => 5,
+        'attack_bonus' => 10,
         'defense_bonus' => 5,
         'tactic_bonus' => 5,
     ];
