@@ -7,6 +7,10 @@ use Illuminate\Support\Collection;
 
 class StandingsService
 {
+    private const INITIAL_STAT = 0;
+    private const POINTS_PER_WIN = 3;
+    private const POINTS_PER_DRAW = 1;
+
     /**
      * @param  \Illuminate\Support\Collection<int, \App\Models\Team>  $teams
      * @return \Illuminate\Support\Collection<int, array<string, int|string>>
@@ -18,14 +22,14 @@ class StandingsService
                 'id' => $team->id,
                 'name' => $team->name,
                 'short_name' => $team->short_name,
-                'played' => 0,
-                'won' => 0,
-                'drawn' => 0,
-                'lost' => 0,
-                'goals_for' => 0,
-                'goals_against' => 0,
-                'goal_difference' => 0,
-                'points' => 0,
+                'played' => self::INITIAL_STAT,
+                'won' => self::INITIAL_STAT,
+                'drawn' => self::INITIAL_STAT,
+                'lost' => self::INITIAL_STAT,
+                'goals_for' => self::INITIAL_STAT,
+                'goals_against' => self::INITIAL_STAT,
+                'goal_difference' => self::INITIAL_STAT,
+                'points' => self::INITIAL_STAT,
             ];
         })->keyBy('id')->all();
 
@@ -45,10 +49,10 @@ class StandingsService
 
                 if ($goalsFor > $goalsAgainst) {
                     $rows[$team->id]['won']++;
-                    $rows[$team->id]['points'] += 3;
+                    $rows[$team->id]['points'] += self::POINTS_PER_WIN;
                 } elseif ($goalsFor === $goalsAgainst) {
                     $rows[$team->id]['drawn']++;
-                    $rows[$team->id]['points']++;
+                    $rows[$team->id]['points'] += self::POINTS_PER_DRAW;
                 } else {
                     $rows[$team->id]['lost']++;
                 }
