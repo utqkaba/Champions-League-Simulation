@@ -83,7 +83,7 @@ function saveFixtureResult(fixtureId) {
         </h1>
 
         <section
-            class="grid gap-6 lg:grid-cols-2 xl:grid-cols-[minmax(0,1.4fr)_minmax(280px,0.8fr)_minmax(280px,0.8fr)] xl:gap-8"
+            class="grid gap-6 lg:grid-cols-2 xl:grid-cols-[minmax(0,1.46fr)_minmax(326px,0.98fr)_minmax(228px,0.66fr)] xl:gap-8"
         >
             <article class="lg:col-span-2 xl:col-span-1">
                 <div>
@@ -132,14 +132,16 @@ function saveFixtureResult(fixtureId) {
                     <div
                         v-for="fixture in currentWeekFixtures"
                         :key="fixture.id"
-                        class="grid grid-cols-[minmax(0,1fr)_92px_minmax(0,1fr)_78px] items-center gap-x-2 border-b border-[#e3e6ea] px-3 py-5 text-[15px] text-[#2c333a] last:border-b-0"
+                        class="grid grid-cols-[minmax(0,1fr)_58px_minmax(0,1fr)_54px] items-center gap-x-1 border-b border-[#e3e6ea] px-3 py-5 text-[15px] text-[#2c333a] last:border-b-0"
                     >
-                        <div class="truncate pr-2">
+                        <div class="pr-2 text-center break-words leading-5">
                             {{ fixture.home_team.name }}
                         </div>
                         <div class="text-center">
                             <template v-if="editingFixtureId === fixture.id">
-                                <div class="flex items-center justify-center gap-1">
+                                <div
+                                    class="flex items-center justify-center gap-1"
+                                >
                                     <input
                                         v-model.number="scoreForm.home_goals"
                                         type="number"
@@ -164,7 +166,7 @@ function saveFixtureResult(fixtureId) {
                                 <span v-else>-</span>
                             </template>
                         </div>
-                        <div class="truncate pl-2 text-right">
+                        <div class="pl-2 text-center break-words leading-5">
                             {{ fixture.away_team.name }}
                         </div>
                         <div class="flex justify-end">
@@ -201,7 +203,7 @@ function saveFixtureResult(fixtureId) {
 
             <article class="min-w-0">
                 <header
-                    class="grid grid-cols-[minmax(0,1fr)_40px] bg-[#2f353b] px-3 py-4 text-[12px] font-bold text-white"
+                    class="grid grid-cols-[minmax(0,1fr)_34px] bg-[#2f353b] px-3 py-4 text-[12px] font-bold text-white"
                 >
                     <div class="pr-2">Championship Predictions</div>
                     <div class="text-right">%</div>
@@ -211,7 +213,7 @@ function saveFixtureResult(fixtureId) {
                     <div
                         v-for="team in championshipPredictions"
                         :key="team.name"
-                        class="grid grid-cols-[minmax(0,1fr)_40px] items-center border-b border-[#e3e6ea] px-3 py-5 text-[15px] text-[#2c333a] last:border-b-0"
+                        class="grid grid-cols-[minmax(0,1fr)_34px] items-center border-b border-[#e3e6ea] px-3 py-5 text-[15px] text-[#2c333a] last:border-b-0"
                     >
                         <div class="truncate pr-2">{{ team.name }}</div>
                         <div class="text-right">{{ team.percentage }}</div>
@@ -277,14 +279,16 @@ function saveFixtureResult(fixtureId) {
                     <div
                         v-for="fixture in matchday"
                         :key="fixture.id"
-                        class="grid grid-cols-[minmax(0,1fr)_92px_minmax(0,1fr)_78px] items-center gap-x-2 border-b border-[#e3e6ea] px-3 py-4 text-[14px] text-[#2c333a] last:border-b-0"
+                        class="grid grid-cols-[minmax(0,1fr)_58px_minmax(0,1fr)_54px] items-center gap-x-1 border-b border-[#e3e6ea] px-3 py-4 text-[14px] text-[#2c333a] last:border-b-0"
                     >
-                        <div class="truncate pr-2">
+                        <div class="pr-2 text-center break-words leading-5">
                             {{ fixture.home_team.name }}
                         </div>
                         <div class="text-center">
                             <template v-if="editingFixtureId === fixture.id">
-                                <div class="flex items-center justify-center gap-1">
+                                <div
+                                    class="flex items-center justify-center gap-1"
+                                >
                                     <input
                                         v-model.number="scoreForm.home_goals"
                                         type="number"
@@ -301,10 +305,12 @@ function saveFixtureResult(fixtureId) {
                                 </div>
                             </template>
                             <template v-else>
-                                {{ fixture.home_goals }}-{{ fixture.away_goals }}
+                                {{ fixture.home_goals }}-{{
+                                    fixture.away_goals
+                                }}
                             </template>
                         </div>
-                        <div class="truncate pl-2 text-right">
+                        <div class="pl-2 text-center break-words leading-5">
                             {{ fixture.away_team.name }}
                         </div>
                         <div class="flex justify-end">
